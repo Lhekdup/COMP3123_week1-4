@@ -1,0 +1,164 @@
+COMP3123 • exec04
+Express JS Exercise Instructions
+
+Overview
+
+Build an Express.js application and submit your work as a ZIP file and a GitHub repository. Include screenshots of your API calls (e.g., Postman) showing outputs or any errors. Also add static middleware so that an instruction.html file can be served from a public folder.
+
+Submission naming
+
+ZIP: StudentID_COMP3123-exec04.zip
+
+Repository: StudentID_COMP3123-exec04
+
+Replace StudentID with your actual ID
+
+Required Deliverables
+
+Create an Express JS application named StudentID_COMP3123-exec04.
+Add the Express framework and nodemon to package.json.
+Implement the routes described below.
+Add static middleware to serve instruction.html from the public folder.
+Upload screenshots showing output or any errors (e.g., from Postman).
+Submit your GitHub repository link and upload the ZIP: StudentID_COMP3123-exec04.zip.
+Endpoints to Implement
+
+GET /hello
+
+Returns Hello Express JS as plain text.
+
+GET /user (query parameters)
+
+Accepts query string parameters: ?firstname=<value>&lastname=<value>.
+
+If parameters are not provided, default to firstname = "Pritesh" and lastname = "Patel".
+Example request: GET /user?firstname=John&lastname=Doe
+
+Example response:
+
+{ "firstname": "John", "lastname": "Doe" }
+POST /user/:firstname/:lastname (path parameters)
+
+Expects path parameters for firstname and lastname.
+
+Example request: POST /user/John/Doe
+
+Example response:
+
+{ "firstname": "John", "lastname": "Doe" }
+POST /users (body – array of users)
+
+Expects a JSON array in the request body, each item with firstname and lastname.
+
+Example request body:
+
+[
+  { "firstname": "Pritesh", "lastname": "Patel" },
+  { "firstname": "John", "lastname": "Doe" },
+  { "firstname": "John", "lastname": "Rome" }
+]
+Example response:
+
+[
+  { "firstname": "Pritesh", "lastname": "Patel" },
+  { "firstname": "John", "lastname": "Doe" },
+  { "firstname": "John", "lastname": "Rome" }
+]
+Static Middleware
+
+Use express.static() to serve the provided instruction.html (download the attached file for this exercise) from a public folder.
+
+Example project structure
+
+StudentID_COMP3123-exec04/
+├─ package.json
+├─ index.js
+└─ public/
+   └─ instruction.html   <— place the attached file here
+index.js snippet
+
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+// ✅ Serve static files in /public (instruction.html will be at /instruction.html)
+app.use(express.static("public"));
+
+// GET /hello
+app.get("/hello", (req, res) => {
+  res.type("text/plain").send("Hello Express JS");
+});
+
+// GET /user?firstname=&lastname=
+app.get("/user", (req, res) => {
+  const firstname = req.query.firstname || "Pritesh";
+  const lastname = req.query.lastname || "Patel";
+  res.json({ firstname, lastname });
+});
+
+// POST /user/:firstname/:lastname
+app.post("/user/:firstname/:lastname", (req, res) => {
+  const { firstname, lastname } = req.params;
+  res.json({ firstname, lastname });
+});
+
+// POST /users  (expects an array of { firstname, lastname })
+app.post("/users", (req, res) => {
+  const users = Array.isArray(req.body) ? req.body : [];
+  res.json(users);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(\`Server running on http://localhost:${PORT}\"));
+Project Setup (Guidance)
+
+1) Initialize project
+
+mkdir StudentID_COMP3123-exec04
+cd StudentID_COMP3123-exec04
+npm init -y
+npm install express
+npm install --save-dev nodemon
+mkdir public
+# Place your instruction.html file into the ./public folder
+2) package.json scripts
+
+{
+  "name": "StudentID_COMP3123-exec04",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
+3) Run and test
+
+# Development (auto-restart):
+npm run dev
+
+# Production-style start:
+npm start
+
+# Test endpoints (examples):
+curl http://localhost:3000/hello
+curl "http://localhost:3000/user?firstname=John&lastname=Doe"
+curl -X POST http://localhost:3000/user/John/Doe
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '[{"firstname":"Pritesh","lastname":"Patel"},{"firstname":"John","lastname":"Doe"}]'
+# Static file (after placing it in public/):
+# http://localhost:3000/instruction.html
+What to Submit
+
+GitHub repository created: StudentID_COMP3123-exec04 and link submitted.
+ZIP uploaded: StudentID_COMP3123-exec04.zip.
+Screenshots of Postman (or similar) showing each endpoint response and any errors.
+Static file served from /public/instruction.html and reachable at /instruction.html.
+© COMP3123 – exec04 • Express JS exercise. This sheet is a formatted restatement of the provided instructions, including static middleware requirements.
