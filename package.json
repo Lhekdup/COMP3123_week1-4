@@ -8,5 +8,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lhekdup/COMP3123.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lhekdup/COMP3123/issues"
+  },
+  "homepage": "https://github.com/Lhekdup/COMP3123#readme"
 }
